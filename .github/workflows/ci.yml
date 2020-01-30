@@ -17,10 +17,9 @@ jobs:
           ruby-version: ${{ matrix.ruby }}
       - name: Install dependencies
         run: |
+          $ErrorActionPreference = 'Continue'
           bundle config --local path .bundle/gems
           bundle config --local without docs lint coverage
-          # warning output can confuse Powershell in CI, (multi-line scripts & exit codes)
-          $env:RUBYOPT = '-W0'
           bundle --jobs 3 --retry 3
       - name: Test
         run: bundle exec ruby -w $(bundle exec ruby -e 'print File.join Gem.bindir, %q(rake)') spec
